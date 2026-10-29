@@ -8,6 +8,11 @@ from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import GroupShuffleSplit
 
 st.set_page_config(page_title="Flight Fare Prediction", layout="wide")
+
+# force black background even if config.toml is missing
+st.markdown("""<style>
+.stApp, [data-testid="stSidebar"], [data-testid="stHeader"] {background-color: #000000; color: #FFFFFF;}
+</style>""", unsafe_allow_html=True)
 T = "plotly_dark"
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 TIMES = ["Morning", "Afternoon", "Evening", "Night", "Unknown"]
@@ -91,8 +96,8 @@ if page == "Overview":
     d.metric("Median price", f"Rs {f['price'].median():,.0f}")
 
     l, r = st.columns(2)
-    l.plotly_chart(px.histogram(f, x="price", color="class", log_x=True, nbins=60,
-                                title="Price distribution (log scale)", template=T), width="stretch")
+    l.plotly_chart(px.histogram(f, x="price", color="class", nbins=60, barmode="overlay", opacity=0.7,
+                                title="Price distribution", template=T), width="stretch")
     n = f["airline"].value_counts().reset_index()
     r.plotly_chart(px.bar(n, x="airline", y="count", title="Flights per airline", template=T), width="stretch")
 
